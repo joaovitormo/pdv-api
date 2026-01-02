@@ -36,6 +36,10 @@ RUN npm ci --only=production && npm cache clean --force
 # Copia o código compilado do builder
 COPY --from=builder /app/dist ./dist
 
+# Copia arquivos Prisma necessários para migrations
+COPY prisma ./prisma
+COPY prisma.config.ts ./
+
 # Copia o arquivo .env (se existir) - melhor usar em docker-compose
 # COPY .env .env
 
