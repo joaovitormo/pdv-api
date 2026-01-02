@@ -33,12 +33,15 @@ COPY package*.json ./
 # Instala apenas dependências de produção
 RUN npm ci --only=production && npm cache clean --force
 
-# Copia o código compilado do builder
-COPY --from=builder /app/dist ./dist
-
-# Copia arquivos Prisma necessários para migrations
+# Copia arquivos Prisma necessários para migrations e geração do cliente
 COPY prisma ./prisma
 COPY prisma.config.ts ./
+
+# Gera o cliente Prisma no stage de produção
+RUN npx prisma generate
+
+# Copia o código compilado do builder
+COPY --from=builder /app/dist ./dist
 
 # Copia o arquivo .env (se existir) - melhor usar em docker-compose
 # COPY .env .env
