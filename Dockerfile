@@ -14,6 +14,9 @@ RUN npm ci
 # Copia código-fonte
 COPY . .
 
+# Gera o cliente Prisma
+RUN npx prisma generate
+
 # Build do projeto
 RUN npm run build
 
@@ -40,4 +43,4 @@ COPY --from=builder /app/dist ./dist
 EXPOSE 3001
 
 # Comando para iniciar a aplicação
-CMD ["node", "dist/main.js"]
+CMD ["sh", "-c", "npm run migrate && npm run start:prod"]
