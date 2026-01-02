@@ -1,0 +1,269 @@
+{
+  "info": {
+    "name": "PDV API",
+    "description": "Coleção de endpoints da API PDV com exemplos",
+    "version": "1.0"
+  },
+  "baseUrl": "http://localhost:3001/api",
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{TOKEN}}",
+        "type": "string"
+      }
+    ]
+  },
+  "endpoints": [
+    {
+      "name": "Auth - Registrar",
+      "method": "POST",
+      "url": "{{baseUrl}}/auth/register",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"username\": \"joao_vitor\",\n  \"email\": \"joao@example.com\",\n  \"password\": \"Senha@123\",\n  \"role\": \"USER\"\n}"
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "method": "POST",
+      "url": "{{baseUrl}}/auth/login",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"username\": \"joao_vitor\",\n  \"password\": \"Senha@123\"\n}"
+      },
+      "tests": "var jsonData = pm.response.json();\npm.environment.set('TOKEN', jsonData.access_token);"
+    },
+    {
+      "name": "Categories - Criar",
+      "method": "POST",
+      "url": "{{baseUrl}}/categories",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{TOKEN}}"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"name\": \"Bebidas\"\n}"
+      }
+    },
+    {
+      "name": "Categories - Listar",
+      "method": "GET",
+      "url": "{{baseUrl}}/categories",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Categories - Obter por ID",
+      "method": "GET",
+      "url": "{{baseUrl}}/categories/1",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Categories - Atualizar",
+      "method": "PUT",
+      "url": "{{baseUrl}}/categories/1",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{TOKEN}}"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"name\": \"Bebidas Quentes\"\n}"
+      }
+    },
+    {
+      "name": "Categories - Deletar",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/categories/1",
+      "headers": {
+        "Authorization": "Bearer {{TOKEN}}"
+      }
+    },
+    {
+      "name": "Products - Criar",
+      "method": "POST",
+      "url": "{{baseUrl}}/products",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{TOKEN}}"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"sku\": \"PROD-001\",\n  \"name\": \"Coca-Cola 2L\",\n  \"description\": \"Refrigerante Coca-Cola em garrafa de 2 litros\",\n  \"price\": 8.50,\n  \"stockQuantity\": 50,\n  \"categoryId\": 1\n}"
+      }
+    },
+    {
+      "name": "Products - Listar",
+      "method": "GET",
+      "url": "{{baseUrl}}/products",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Products - Listar com Filtros",
+      "method": "GET",
+      "url": "{{baseUrl}}/products?name=Coca&categoryId=1",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Products - Obter por ID",
+      "method": "GET",
+      "url": "{{baseUrl}}/products/1",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Products - Atualizar",
+      "method": "PUT",
+      "url": "{{baseUrl}}/products/1",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{TOKEN}}"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"name\": \"Coca-Cola 2L Zero\",\n  \"price\": 9.00,\n  \"stockQuantity\": 40\n}"
+      }
+    },
+    {
+      "name": "Products - Deletar",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/products/1",
+      "headers": {
+        "Authorization": "Bearer {{TOKEN}}"
+      }
+    },
+    {
+      "name": "Customers - Criar",
+      "method": "POST",
+      "url": "{{baseUrl}}/customers",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{TOKEN}}"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"name\": \"João Silva\",\n  \"document\": \"123.456.789-00\",\n  \"email\": \"joao.silva@email.com\",\n  \"phone\": \"(11) 98765-4321\"\n}"
+      }
+    },
+    {
+      "name": "Customers - Listar",
+      "method": "GET",
+      "url": "{{baseUrl}}/customers",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Customers - Listar com Filtros",
+      "method": "GET",
+      "url": "{{baseUrl}}/customers?name=João",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Customers - Obter por ID",
+      "method": "GET",
+      "url": "{{baseUrl}}/customers/1",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Customers - Atualizar",
+      "method": "PUT",
+      "url": "{{baseUrl}}/customers/1",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{TOKEN}}"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"phone\": \"(11) 99999-9999\"\n}"
+      }
+    },
+    {
+      "name": "Customers - Deletar",
+      "method": "DELETE",
+      "url": "{{baseUrl}}/customers/1",
+      "headers": {
+        "Authorization": "Bearer {{TOKEN}}"
+      }
+    },
+    {
+      "name": "Sales - Criar",
+      "method": "POST",
+      "url": "{{baseUrl}}/sales",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{TOKEN}}"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"items\": [\n    {\n      \"productId\": 1,\n      \"quantity\": 2,\n      \"unitPrice\": 8.50\n    }\n  ],\n  \"customerId\": 1,\n  \"paymentMethod\": \"DINHEIRO\",\n  \"status\": \"COMPLETED\"\n}"
+      }
+    },
+    {
+      "name": "Sales - Listar",
+      "method": "GET",
+      "url": "{{baseUrl}}/sales",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Sales - Listar com Filtros",
+      "method": "GET",
+      "url": "{{baseUrl}}/sales?status=COMPLETED&customerId=1",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Sales - Obter por ID",
+      "method": "GET",
+      "url": "{{baseUrl}}/sales/1",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    {
+      "name": "Sales - Atualizar Status",
+      "method": "PUT",
+      "url": "{{baseUrl}}/sales/1",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{TOKEN}}"
+      },
+      "body": {
+        "mode": "raw",
+        "raw": "{\n  \"status\": \"OPEN\"\n}"
+      }
+    },
+    {
+      "name": "Sales - Cancelar",
+      "method": "POST",
+      "url": "{{baseUrl}}/sales/1/cancel",
+      "headers": {
+        "Authorization": "Bearer {{TOKEN}}"
+      }
+    }
+  ]
+}

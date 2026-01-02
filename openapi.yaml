@@ -1,0 +1,500 @@
+openapi: 3.0.0
+info:
+  title: PDV API
+  description: API para gerenciamento de Ponto de Venda
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/api
+    description: Development
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginDto:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    RegisterDto:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        role:
+          type: string
+          enum: [USER, ADMIN, MANAGER]
+
+    CreateProductDto:
+      type: object
+      required:
+        - sku
+        - name
+        - price
+        - categoryId
+      properties:
+        sku:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        stockQuantity:
+          type: integer
+          default: 0
+        categoryId:
+          type: integer
+
+    CreateCategoryDto:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+
+    CreateCustomerDto:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        document:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+
+    CreateSaleDto:
+      type: object
+      required:
+        - items
+        - paymentMethod
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: integer
+              quantity:
+                type: integer
+              unitPrice:
+                type: number
+        customerId:
+          type: integer
+        paymentMethod:
+          type: string
+        status:
+          type: string
+          enum: [OPEN, COMPLETED, CANCELED]
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Registrar novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDto'
+      responses:
+        '201':
+          description: Usuário registrado com sucesso
+        '409':
+          description: Usuário ou email já existe
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Fazer login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDto'
+      responses:
+        '200':
+          description: Login bem-sucedido, retorna JWT token
+        '401':
+          description: Credenciais inválidas
+
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Listar categorias
+      responses:
+        '200':
+          description: Lista de categorias
+    post:
+      tags:
+        - Categories
+      summary: Criar categoria
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategoryDto'
+      responses:
+        '201':
+          description: Categoria criada
+        '401':
+          description: Não autenticado
+
+  /categories/{id}:
+    get:
+      tags:
+        - Categories
+      summary: Obter categoria por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Categoria encontrada
+        '404':
+          description: Categoria não encontrada
+    put:
+      tags:
+        - Categories
+      summary: Atualizar categoria
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategoryDto'
+      responses:
+        '200':
+          description: Categoria atualizada
+    delete:
+      tags:
+        - Categories
+      summary: Deletar categoria
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Categoria deletada
+
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Listar produtos
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+        - in: query
+          name: categoryId
+          schema:
+            type: integer
+        - in: query
+          name: sku
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de produtos
+    post:
+      tags:
+        - Products
+      summary: Criar produto
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductDto'
+      responses:
+        '201':
+          description: Produto criado
+        '401':
+          description: Não autenticado
+
+  /products/{id}:
+    get:
+      tags:
+        - Products
+      summary: Obter produto por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Produto encontrado
+    put:
+      tags:
+        - Products
+      summary: Atualizar produto
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductDto'
+      responses:
+        '200':
+          description: Produto atualizado
+    delete:
+      tags:
+        - Products
+      summary: Deletar produto
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Produto deletado
+
+  /customers:
+    get:
+      tags:
+        - Customers
+      summary: Listar clientes
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+        - in: query
+          name: document
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de clientes
+    post:
+      tags:
+        - Customers
+      summary: Criar cliente
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerDto'
+      responses:
+        '201':
+          description: Cliente criado
+        '401':
+          description: Não autenticado
+
+  /customers/{id}:
+    get:
+      tags:
+        - Customers
+      summary: Obter cliente por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Cliente encontrado
+    put:
+      tags:
+        - Customers
+      summary: Atualizar cliente
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerDto'
+      responses:
+        '200':
+          description: Cliente atualizado
+    delete:
+      tags:
+        - Customers
+      summary: Deletar cliente
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Cliente deletado
+
+  /sales:
+    get:
+      tags:
+        - Sales
+      summary: Listar vendas
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [OPEN, COMPLETED, CANCELED]
+        - in: query
+          name: customerId
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de vendas
+    post:
+      tags:
+        - Sales
+      summary: Criar venda
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSaleDto'
+      responses:
+        '201':
+          description: Venda criada
+        '400':
+          description: Estoque insuficiente
+        '401':
+          description: Não autenticado
+
+  /sales/{id}:
+    get:
+      tags:
+        - Sales
+      summary: Obter venda por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Venda encontrada
+    put:
+      tags:
+        - Sales
+      summary: Atualizar status da venda
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [OPEN, COMPLETED, CANCELED]
+      responses:
+        '200':
+          description: Venda atualizada
+
+  /sales/{id}/cancel:
+    post:
+      tags:
+        - Sales
+      summary: Cancelar venda (restaura estoque)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Venda cancelada e estoque restaurado

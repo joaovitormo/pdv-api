@@ -1,32 +1,73 @@
-# compiled output
+# ================================================
+# COMPILED OUTPUT & BUILD
+# ================================================
 /dist
-/node_modules
 /build
+.next
+out/
 
-# Logs
-logs
+# ================================================
+# DEPENDENCIES & PACKAGES
+# ================================================
+/node_modules
+*.pnp
+.pnp.js
+
+# ================================================
+# LOGS & DEBUG
+# ================================================
+logs/
 *.log
 npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+.npm
+.eslintcache
+.node_repl_history
 
-# OS
+# ================================================
+# ENVIRONMENT VARIABLES (SENSITIVE)
+# ================================================
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ================================================
+# DATABASE
+# ================================================
+*.sqlite
+*.sqlite3
+*.db
+
+# ================================================
+# TEMPORARY FILES
+# ================================================
+.temp
+.tmp
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# ================================================
+# OS & IDE
+# ================================================
 .DS_Store
-
-# Tests
-/coverage
-/.nyc_output
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # IDE - VSCode
 .vscode/*
@@ -35,22 +76,69 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+# IDE - WebStorm
+.idea/
+*.iml
+*.iws
+*.ipr
 
-# temp directory
-.temp
-.tmp
+# IDE - Others
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.sublime-project
 
-# Runtime data
-pids
+# ================================================
+# TESTING
+# ================================================
+/coverage
+/.nyc_output
+*.lcov
+.mocha_output
+
+# ================================================
+# RUNTIME DATA
+# ================================================
+pids/
 *.pid
 *.seed
 *.pid.lock
+instances.json
 
-# Diagnostic reports (https://nodejs.org/api/report.html)
+# ================================================
+# DIAGNOSTIC REPORTS
+# ================================================
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+report-*.json
+
+# ================================================
+# OS PROCESS FILES
+# ================================================
+.pids
+lerna.log
+yarn-error.log*
+
+# ================================================
+# DOCKER
+# ================================================
+.dockerignore
+docker-compose.override.yml
+
+# ================================================
+# SECRETS & CREDENTIALS
+# ================================================
+.env.*.secret
+*.key
+*.pem
+.ssh/
+secrets/
+
+# ================================================
+# LOCAL DEVELOPMENT
+# ================================================
+.vscode-test
+.DS_Store
+*.orig

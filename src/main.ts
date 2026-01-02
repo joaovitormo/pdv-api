@@ -3,8 +3,8 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-import { LoggingInterceptor } from './config/logging.interceptor';
-import { rateLimitLoginMiddleware } from './config/rate-limit.config';
+import { LoggingInterceptor } from './middlewares/logging.interceptor';
+import { rateLimitLoginMiddleware } from './middlewares/rate-limit.config';
 import { logger } from './config/logger';
 
 async function bootstrap() {
