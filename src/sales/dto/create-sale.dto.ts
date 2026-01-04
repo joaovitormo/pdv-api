@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsInt, IsPositive, IsNotEmpty, IsOptional, IsEnum, ValidateNested } from 'class-validator';
+import { IsArray, IsInt, IsNumber, IsPositive, IsNotEmpty, IsOptional, IsEnum, ValidateNested } from 'class-validator';
 import { SaleStatus } from '@prisma/client';
 
 export class CreateSaleItemDto {
@@ -13,7 +13,7 @@ export class CreateSaleItemDto {
   @IsNotEmpty({ message: 'Quantidade é obrigatória' })
   quantity: number;
 
-  @IsInt()
+  @IsNumber()
   @IsPositive({ message: 'Preço unitário deve ser positivo' })
   @IsNotEmpty({ message: 'Preço unitário é obrigatório' })
   unitPrice: number;
