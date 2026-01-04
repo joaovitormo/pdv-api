@@ -26,6 +26,7 @@ export class SalesController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll(
     @Query('status') status?: SaleStatus,
     @Query('customerId', new ParseIntPipe({ optional: true })) customerId?: number,
@@ -34,6 +35,7 @@ export class SalesController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.salesService.findOne(id);
   }

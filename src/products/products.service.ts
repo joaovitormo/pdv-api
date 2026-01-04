@@ -59,6 +59,16 @@ export class ProductsService {
     });
   }
 
+  async searchByName(name: string) {
+    return this.prisma.product.findMany({
+      where: {
+        name: { contains: name, mode: 'insensitive' },
+      },
+      include: { category: true },
+      orderBy: { name: 'asc' },
+    });
+  }
+
   async findOne(id: number) {
     const product = await this.prisma.product.findUnique({
       where: { id },

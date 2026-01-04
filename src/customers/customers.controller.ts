@@ -26,11 +26,13 @@ export class CustomersController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll(@Query('name') name?: string, @Query('document') document?: string) {
     return this.customersService.findAll({ name, document });
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.customersService.findOne(id);
   }

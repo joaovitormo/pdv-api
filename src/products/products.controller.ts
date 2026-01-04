@@ -25,7 +25,14 @@ export class ProductsController {
     return this.productsService.create(createProductDto);
   }
 
+  @Get('search/:name')
+  @UseGuards(JwtAuthGuard)
+  searchByName(@Param('name') name: string) {
+    return this.productsService.searchByName(name);
+  }
+
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll(
     @Query('name') name?: string,
     @Query('categoryId', new ParseIntPipe({ optional: true })) categoryId?: number,
@@ -35,6 +42,7 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.findOne(id);
   }

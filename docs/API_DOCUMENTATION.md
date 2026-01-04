@@ -8,7 +8,7 @@
 
 ## 🔐 Autenticação
 
-A maioria dos endpoints requer um **JWT Token** obtido através do login.
+Todos os endpoints, exceto `/auth/login`, `/auth/register` e `/health/*`, requerem um **JWT Token** obtido através do login.
 
 ### 1️⃣ Registrar novo usuário
 
@@ -104,10 +104,11 @@ Content-Type: application/json
 
 ---
 
-### 2️⃣ Listar Categorias (Público)
+### 2️⃣ Listar Categorias (Requer Auth)
 
 ```http
 GET /api/categories
+Authorization: Bearer <token>
 ```
 
 **Response (200):**
@@ -128,10 +129,11 @@ GET /api/categories
 
 ---
 
-### 3️⃣ Obter Categoria por ID (Público)
+### 3️⃣ Obter Categoria por ID (Requer Auth)
 
 ```http
 GET /api/categories/1
+Authorization: Bearer <token>
 ```
 
 **Response (200):**
@@ -230,10 +232,11 @@ Content-Type: application/json
 
 ---
 
-### 2️⃣ Listar Produtos (Público)
+### 2️⃣ Listar Produtos (Requer Auth)
 
 ```http
 GET /api/products
+Authorization: Bearer <token>
 ```
 
 **Com filtros:**
@@ -262,10 +265,41 @@ GET /api/products?name=Coca&categoryId=1&sku=PROD-001
 
 ---
 
-### 3️⃣ Obter Produto por ID (Público)
+### 3️⃣ Buscar Produtos por Nome (Requer Auth)
+
+```http
+GET /api/products/search/Coca
+Authorization: Bearer <token>
+```
+
+**Response (200):**
+```json
+[
+  {
+    "id": 1,
+    "sku": "PROD-001",
+    "name": "Coca-Cola 2L",
+    "description": "Refrigerante Coca-Cola em garrafa de 2 litros",
+    "price": "8.50",
+    "stockQuantity": 50,
+    "categoryId": 1,
+    "category": {
+      "id": 1,
+      "name": "Bebidas"
+    }
+  }
+]
+```
+
+**⚠️ Nota:** Usa busca LIKE (case-insensitive) no banco de dados.
+
+---
+
+### 4️⃣ Obter Produto por ID (Requer Auth)
 
 ```http
 GET /api/products/1
+Authorization: Bearer <token>
 ```
 
 **Response (200):**
@@ -287,7 +321,7 @@ GET /api/products/1
 
 ---
 
-### 4️⃣ Atualizar Produto (Requer Auth)
+### 5️⃣ Atualizar Produto (Requer Auth)
 
 ```http
 PUT /api/products/1
@@ -323,7 +357,7 @@ Content-Type: application/json
 
 ---
 
-### 5️⃣ Deletar Produto (Requer Auth)
+### 6️⃣ Deletar Produto (Requer Auth)
 
 ```http
 DELETE /api/products/1
@@ -383,10 +417,11 @@ Content-Type: application/json
 
 ---
 
-### 2️⃣ Listar Clientes (Público)
+### 2️⃣ Listar Clientes (Requer Auth)
 
 ```http
 GET /api/customers
+Authorization: Bearer <token>
 ```
 
 **Com filtros:**
@@ -410,10 +445,11 @@ GET /api/customers?name=João&document=123.456.789-00
 
 ---
 
-### 3️⃣ Obter Cliente por ID (Público)
+### 3️⃣ Obter Cliente por ID (Requer Auth)
 
 ```http
 GET /api/customers/1
+Authorization: Bearer <token>
 ```
 
 **Response (200):**
@@ -573,10 +609,11 @@ Content-Type: application/json
 
 ---
 
-### 2️⃣ Listar Vendas (Público)
+### 2️⃣ Listar Vendas (Requer Auth)
 
 ```http
 GET /api/sales
+Authorization: Bearer <token>
 ```
 
 **Com filtros:**
@@ -602,10 +639,11 @@ GET /api/sales?status=COMPLETED&customerId=1
 
 ---
 
-### 3️⃣ Obter Venda por ID (Público)
+### 3️⃣ Obter Venda por ID (Requer Auth)
 
 ```http
 GET /api/sales/1
+Authorization: Bearer <token>
 ```
 
 **Response (200):**
@@ -772,4 +810,4 @@ curl -X GET http://localhost:3001/api/products \
 
 ---
 
-**Última atualização:** 31 de dezembro de 2025
+**Última atualização:** 3 de janeiro de 2026
