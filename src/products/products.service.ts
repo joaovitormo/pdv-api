@@ -1,11 +1,15 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private cloudinary: CloudinaryService,
+  ) {}
 
   async create(createProductDto: CreateProductDto) {
     const existingProduct = await this.prisma.product.findUnique({
@@ -32,7 +36,27 @@ export class ProductsService {
         price: createProductDto.price,
         stockQuantity: createProductDto.stockQuantity || 0,
         categoryId: createProductDto.categoryId,
+        imageUrl: createProductDto.imageUrl,
       },
+      include: { category: true },
+    });
+  }
+
+  async uploadImage(id: number, file: { buffer: Buffer; mimetype: string }) {
+    const product = await this.findOne(id);
+
+    // Delete old image if it exists
+    if (product.imageUrl) {
+      await this.cloudinary.deleteImage(product.imageUrl);
+    }
+
+    // Upload new image
+    const imageUrl = await this.cloudinary.uploadImage(file);
+
+    // Update product with new image URL
+    return this.prisma.product.update({
+      where: { id },
+      data: { imageUrl },
       include: { category: true },
     });
   }
@@ -113,7 +137,12 @@ export class ProductsService {
   }
 
   async remove(id: number) {
-    await this.findOne(id);
+    const product = await this.findOne(id);
+
+    // Delete image from Cloudinary if exists
+    if (product.imageUrl) {
+      await this.cloudinary.deleteImage(product.imageUrl);
+    }
 
     return this.prisma.product.delete({
       where: { id },

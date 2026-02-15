@@ -26,4 +26,8 @@ export class UpdateProductDto {
   @IsInt()
   @IsOptional()
   categoryId?: number;
+
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
 }

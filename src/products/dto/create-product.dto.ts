@@ -26,4 +26,8 @@ export class CreateProductDto {
   @IsInt()
   @IsNotEmpty({ message: 'ID da categoria é obrigatório' })
   categoryId: number;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
 }
